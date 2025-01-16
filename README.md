@@ -16,4 +16,4 @@ This repository contains the code for the **backend** of my project. The backend
 
 ## Frontend
 
-The frontend for this project is built with React and can be found in the [react-frontend](https://github.com/MyProjectOrg/react-frontend) repository. Together, they create a system for managing employee work sessions.
+The frontend for this project is built with React and can be found in the [react-frontend](https://github.com/WorkTimeTracker-Project/react-frontend) repository. Together, they create a system for managing employee work sessions.
