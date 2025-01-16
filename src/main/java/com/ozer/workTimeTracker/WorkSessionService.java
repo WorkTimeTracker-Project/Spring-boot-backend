@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -21,32 +22,41 @@ public class WorkSessionService {
     EmployeeRepository employeeRepository;
 
     public List<WorkSessionDTO> getByEmployeeName(String employee) {
-        Optional<List<WorkSession>> workSessions = workSessionRepository.findByEmployeeName(employee);
-        List<WorkSessionDTO> workSessionDTOList = null;
-        workSessionDTOList = mapToWorksessionDTO(workSessions, workSessionDTOList);
-        return workSessionDTOList;
+        if(employee == null) {
+            throw new IllegalArgumentException("employee name cannot be null");
+        }
+        List<WorkSession> workSessions = workSessionRepository.findByEmployeeName(employee)
+                .orElseThrow(() -> new NoSuchElementException("no worksessions for " + employee + " found "));
+
+        return mapToWorksessionDTO(workSessions);
     }
 
     public List<WorkSessionDTO> getByEmployeeNameAndDate(String employee, LocalDate date) {
-        Optional<List<WorkSession>> workSessions = workSessionRepository.findByEmployeeNameAndDate(employee, date);
-        List<WorkSessionDTO> workSessionDTOList = null;
-        workSessionDTOList = mapToWorksessionDTO(workSessions, workSessionDTOList);
-        return workSessionDTOList;
+        if(employee == null) {
+            throw new IllegalArgumentException("employee name cannot be null");
+        }
+        List<WorkSession> workSessions = workSessionRepository.findByEmployeeNameAndDate(employee, date)
+                .orElseThrow(() -> new NoSuchElementException("no worksessions for " + employee + " from " + date + " found "));
+
+        return mapToWorksessionDTO(workSessions);
     }
 
 
     public List<WorkSessionDTO> getByEmployeeNameAndDateBetweeen(String employee, LocalDate startDate, LocalDate endDate) {
-        Optional<List<WorkSession>> workSessions = workSessionRepository.findByEmployeeNameAndDateBetween(employee, startDate, endDate);
-        List<WorkSessionDTO> workSessionDTOList = null;
-        workSessionDTOList = mapToWorksessionDTO(workSessions, workSessionDTOList);
-        return workSessionDTOList;
+        if(employee == null) {
+            throw new IllegalArgumentException("employee name cannot be null");
+        }
+        List<WorkSession> workSessions = workSessionRepository.findByEmployeeNameAndDateBetween(employee, startDate, endDate)
+                .orElseThrow(() -> new NoSuchElementException("no worksessions for " + employee + " from " + startDate + " to " + endDate + " found "));
+
+        return mapToWorksessionDTO(workSessions);
     }
 
 
-    private static List<WorkSessionDTO> mapToWorksessionDTO(Optional<List<WorkSession>> workSessions, List<WorkSessionDTO> workSessionDTOList) {
-        if (workSessions.isPresent()) {
-            workSessionDTOList = new ArrayList<>();
-            for (WorkSession workSession : workSessions.get()) {
+    private static List<WorkSessionDTO> mapToWorksessionDTO(List<WorkSession> workSessions) {
+        List <WorkSessionDTO> workSessionDTOList = new ArrayList<>();
+        if (!workSessions.isEmpty()) {
+            for (WorkSession workSession : workSessions) {
                 WorkSessionDTO workSessionDTO = new WorkSessionDTO();
                 workSessionDTO.setId(workSession.getId());
                 workSessionDTO.setEmployeeName(workSession.getEmployeeName());
@@ -72,6 +82,10 @@ public class WorkSessionService {
 
 
     public WorkSession startSession(String employee) {
+        if(employee == null) {
+            throw new IllegalArgumentException("employee name cannot be null");
+        }
+
         Optional<WorkSession> openSession = workSessionRepository.findOpenSessionByMitarbeiterName(employee);
 
         if(openSession.isPresent()) {
@@ -97,6 +111,10 @@ public class WorkSessionService {
     }
 
     public WorkSession endSession(String employee) {
+        if(employee == null) {
+            throw new IllegalArgumentException("employee name cannot be null");
+        }
+
         Optional<WorkSession> openSession = workSessionRepository.findOpenSessionByMitarbeiterName(employee);
         if (openSession.isPresent()) {
             WorkSession workSession = openSession.get();
@@ -120,11 +138,8 @@ public class WorkSessionService {
 
 
     public WorkSession updateSession(WorkSessionDTO workSessionDTO) {
-        Optional<WorkSession> optionalWorkSession = workSessionRepository.findById(workSessionDTO.getId());
-        if (optionalWorkSession == null) {
-            return null;
-        }
-        WorkSession workSession = optionalWorkSession.get();
+        WorkSession workSession  = workSessionRepository.findById(workSessionDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("WorkSession with id " + workSessionDTO.getId() + " not found"));
         workSession.setEmployeeName(workSessionDTO.getEmployeeName());
         workSession.setStartTime(workSessionDTO.getStartTime().atDate(workSessionDTO.getDate()));
         workSession.setEndTime(workSessionDTO.getEndTime().atDate(workSessionDTO.getDate()));
@@ -143,10 +158,8 @@ public class WorkSessionService {
     }
 
     public Employee deleteEmployee(String name) {
-        Employee employee = employeeRepository.findByName(name).orElse(null);
-        if (employee==null) {
-            return null;
-        }
+        Employee employee = employeeRepository.findByName(name)
+                        .orElseThrow(() -> new NoSuchElementException("no employee with name " + name + " found"));
         employeeRepository.delete(employee);
         return employee;
     }
