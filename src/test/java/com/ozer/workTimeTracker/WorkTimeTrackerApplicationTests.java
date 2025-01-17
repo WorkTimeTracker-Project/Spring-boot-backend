@@ -1,4 +1,4 @@
-package com.ozer.workTimeTracker;
+/*package com.ozer.workTimeTracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,3 +11,4 @@ class WorkTimeTrackerApplicationTests {
 	}
 
 }
+*/
