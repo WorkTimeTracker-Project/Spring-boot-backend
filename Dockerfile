@@ -8,6 +8,8 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
+COPY mvnw .
+
 # Stelle sicher, dass mvnw ausführbar ist
 RUN chmod +x mvnw
 
