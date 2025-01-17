@@ -9,6 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 COPY mvnw .
+COPY .mvn .mvn
 
 # Stelle sicher, dass mvnw ausführbar ist
 RUN chmod +x mvnw
