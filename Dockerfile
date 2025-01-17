@@ -1,4 +1,4 @@
-# Basis-Image mit OpenJDK 23 (entsprechend der Version, die du im Projekt verwendest)
+# Basis-Image mit OpenJDK 23
 FROM openjdk:23-jdk-slim
 
 # Arbeitsverzeichnis im Container erstellen
@@ -7,6 +7,9 @@ WORKDIR /app
 # Kopiere die pom.xml und das Verzeichnis mit den Quellcode-Dateien
 COPY pom.xml .
 COPY src ./src
+
+# Stelle sicher, dass mvnw ausführbar ist
+RUN chmod +x mvnw
 
 # Baue das Projekt
 RUN ./mvnw clean install
