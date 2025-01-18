@@ -21,6 +21,9 @@ public class WorkSessionService {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     public List<WorkSessionDTO> getByEmployeeName(String employee) {
         if(employee == null) {
             throw new IllegalArgumentException("employee name cannot be null");
@@ -169,5 +172,8 @@ public class WorkSessionService {
         return employeeRepository.findByEmployer(employer);
     }
 
+    public Optional<Account> getAccount(String username) {
+        return accountRepository.findByUsername(username);
+    }
 
 }

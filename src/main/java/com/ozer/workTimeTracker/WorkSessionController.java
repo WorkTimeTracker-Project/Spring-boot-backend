@@ -116,4 +116,9 @@ public class WorkSessionController {
         return "up and running";
     }
 
+    @GetMapping("/account/{username}")
+    public Optional<Account> getAccount(@PathVariable String username) {
+        return workSessionService.getAccount(username);
+    }
+
 }
