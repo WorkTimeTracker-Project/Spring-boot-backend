@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@CrossOrigin("*")
 @RequestMapping("/api/work-sessions")
 @RestController
 public class WorkSessionController {
@@ -110,6 +109,11 @@ public class WorkSessionController {
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(iae.getMessage());
         }
+    }
+
+    @GetMapping("/check")
+    public String getCheck() {
+        return "up and running";
     }
 
 }
