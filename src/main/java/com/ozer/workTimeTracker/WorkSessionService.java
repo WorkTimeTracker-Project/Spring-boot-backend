@@ -150,9 +150,10 @@ public class WorkSessionService {
         return workSession;
     }
 
-    public Employee addEmployee(String name) {
+    public Employee addEmployee(String employer, String name) {
         Employee newEmployee = new Employee();
         newEmployee.setName(name);
+        newEmployee.setEmployer(employer);
         employeeRepository.save(newEmployee);
         return newEmployee;
     }
@@ -164,8 +165,8 @@ public class WorkSessionService {
         return employee;
     }
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<Employee> getAllEmployees(String employer) {
+        return employeeRepository.findByEmployer(employer);
     }
 
 

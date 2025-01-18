@@ -89,14 +89,14 @@ public class WorkSessionController {
         }
     }
 
-    @GetMapping("employee")
-    public Optional<List<Employee>> getDateBetweenWorkingTime() {
-        return Optional.ofNullable(workSessionService.getAllEmployees());
+    @GetMapping("{employer}/employee")
+    public List<Employee> getDateBetweenWorkingTime(@PathVariable String employer) {
+        return workSessionService.getAllEmployees(employer);
     }
 
-    @PostMapping("/employee/add/{name}")
-    public ResponseEntity<Employee> addEmployee(@PathVariable String name) {
-        Employee employee = workSessionService.addEmployee(name);
+    @PostMapping("{employer}/employee/add/{name}")
+    public ResponseEntity<Employee> addEmployee(@PathVariable String employer, @PathVariable String name) {
+        Employee employee = workSessionService.addEmployee(employer, name);
 
         return ResponseEntity.ok(employee);
     }

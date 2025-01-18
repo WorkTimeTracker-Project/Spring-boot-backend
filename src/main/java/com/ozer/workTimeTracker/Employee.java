@@ -14,10 +14,12 @@ public class Employee {
 
     private String name;
 
+    private String employer;
 
-    public Employee(Long id, String name ) {
+    public Employee(Long id, String name, String employer ) {
         this.id = id;
         this.name = name;
+        this.employer = employer;
     }
 
     public Employee() {
@@ -39,6 +41,13 @@ public class Employee {
         this.name = name;
     }
 
+    public String getEmployer() {
+        return employer;
+    }
+
+    public void setEmployer(String employer) {
+        this.employer = employer;
+    }
 }
 
 
