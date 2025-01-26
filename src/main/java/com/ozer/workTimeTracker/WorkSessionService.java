@@ -1,5 +1,8 @@
 package com.ozer.workTimeTracker;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +16,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class WorkSessionService {
 
+    private static final Logger log = LoggerFactory.getLogger(WorkSessionService.class);
     @Autowired
     WorkSessionRepository workSessionRepository;
 
@@ -98,9 +103,11 @@ public class WorkSessionService {
 
             if(startDate.equals(currentDate)) {
                 System.out.println("du bist bereits eingestempelt");
+                log.debug("Du bist bereits eingestempelt");
                 return workSession;
             } else {
                 System.out.println("Vortag nicht mit gehen gestempelt, wird automatisch geschlossen");
+                log.debug("Vortag nicht mit gehen gestempelt, wird automatisch geschlossen");
                 workSession.setEndTime(LocalDateTime.of(startDate, LocalTime.of(23, 59)));
                 workSessionRepository.save(workSession);
                 return null;
@@ -126,6 +133,7 @@ public class WorkSessionService {
 
             if(startDate.isBefore(currentDate)) {
                 System.out.println("Vortag nicht mit gehen gestempelt, wird automatisch geschlossen");
+                log.debug("Vortag nicht mit gehen gestempelt, wird automatisch geschlossen");
                 workSession.setEndTime(LocalDateTime.of(startDate, LocalTime.of(23, 59)));
                 workSessionRepository.save(workSession);
                 return null;
@@ -136,6 +144,7 @@ public class WorkSessionService {
             }
         }
         System.out.println("keine offene Sitzung vorhanden");
+        log.debug("keine offene Sitzung vorhanden");
         return null;
     }
 
